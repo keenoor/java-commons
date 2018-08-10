@@ -27,7 +27,7 @@ publish {
     userOrg = 'truthpure'
     groupId = 'com.keenoor'
     artifactId = 'java-commons'
-    publishVersion = '0.0.1'
+    publishVersion = '0.0.2'
     desc = 'java common utils for web'
     website = 'https://github.com/keenoor/java-commons'
 }
