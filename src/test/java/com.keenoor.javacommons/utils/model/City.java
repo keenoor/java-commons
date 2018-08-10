@@ -1,0 +1,25 @@
+package com.keenoor.javacommons.utils.model;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * @author: chenliuchun
+ * Date:        2018/8/7
+ * Description:
+ * Modification History:
+ * Date       Author       Version     Description
+ * -----------------------------------------------------
+ */
+@NoArgsConstructor
+@Data
+public class City {
+
+    /**
+     * code : 101
+     * city : 江苏苏州
+     */
+
+    private int code;
+    private String city;
+}
