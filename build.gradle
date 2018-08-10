@@ -1,7 +1,17 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.8.1'
+    }
+}
+
 plugins {
     id 'java'
     id 'io.franzbecker.gradle-lombok' version '1.14'
 }
+apply plugin: 'com.novoda.bintray-release'
 
 group 'com.keenoor'
 version '1.0-SNAPSHOT'
@@ -11,6 +21,15 @@ sourceCompatibility = 1.8
 lombok {
     version = '1.18.2'
     sha256 = ""
+}
+
+publish {
+    userOrg = 'truthpure'
+    groupId = 'com.keenoor'
+    artifactId = 'java-commons'
+    publishVersion = '0.0.1'
+    desc = 'java common utils for web'
+    website = 'https://github.com/keenoor/java-commons'
 }
 
 repositories {
