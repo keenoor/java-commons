@@ -18,6 +18,17 @@ version '0.0.3'
 
 sourceCompatibility = 1.8
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+// 忽略 javadoc 报警产生的中断
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
 lombok {
     version = '1.18.2'
     sha256 = ""
