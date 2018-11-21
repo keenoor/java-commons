@@ -1,5 +1,8 @@
 package com.keenoor.javacommons;
 
+import com.keenoor.javacommons.utils.GsonUtil;
+import com.keenoor.javacommons.utils.model.AddressReq;
+
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -35,6 +38,15 @@ public class AppTest {
 
         String[] strings = {"aa", "bb", "cc"};
         String s = Arrays.toString(strings);
+        System.out.println(s);
+    }
+
+    @Test
+    public void testJsonArray(){
+
+        AddressReq req = new AddressReq();
+        req.setRegistryAddress(new String[]{"sdfsdf","sdfsdf","sdfsdf","sdfsdf"});
+        String s = GsonUtil.toJson(req);
         System.out.println(s);
     }
 

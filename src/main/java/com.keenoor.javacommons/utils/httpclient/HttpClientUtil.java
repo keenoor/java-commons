@@ -17,6 +17,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.ssl.SSLInitializationException;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,16 +52,25 @@ public class HttpClientUtil {
     private HttpClientUtil() {
     }
 
-    private static CloseableHttpClient getHttpClient() {
+    private static CloseableHttpClient getHttpClient(String url) {
         if (httpClient == null) {
             synchronized (HttpClientUtil.class) {
                 if (httpClient == null) {
-                    RequestConfig requestConfig = RequestConfig.custom()
-                            .setConnectTimeout(CONNECT_TIMEOUT)
-                            .setConnectionRequestTimeout(REQUEST_TIMEOUT)
-                            .setSocketTimeout(SOCKET_TIMEOUT)
-                            .build();
-                    httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
+                    if (url.startsWith("https://")) {
+                        try {
+                            httpClient = new SSLClient();
+                        } catch (KeyManagementException | NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                            throw new SSLInitializationException("new SSLClient error: ", e);
+                        }
+                    }else{
+                        RequestConfig requestConfig = RequestConfig.custom()
+                                .setConnectTimeout(CONNECT_TIMEOUT)
+                                .setConnectionRequestTimeout(REQUEST_TIMEOUT)
+                                .setSocketTimeout(SOCKET_TIMEOUT)
+                                .build();
+                        httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
+                    }
                 }
             }
         }
@@ -72,7 +84,7 @@ public class HttpClientUtil {
     public static String get(String url, Map<String, Object> params) throws RequestException {
 
         // 创建Httpclient对象
-        CloseableHttpClient httpclient = getHttpClient();
+        CloseableHttpClient httpclient = getHttpClient(url);
         CloseableHttpResponse response = null;
 
         try {
@@ -111,7 +123,7 @@ public class HttpClientUtil {
         }
 
         // 创建Httpclient对象
-        CloseableHttpClient httpClient = getHttpClient();
+        CloseableHttpClient httpClient = getHttpClient(url);
         CloseableHttpResponse response = null;
         String resultString = "";
 
@@ -149,7 +161,7 @@ public class HttpClientUtil {
         logger.info("POST PARAMS: {}", json);
 
         // 创建Httpclient对象
-        CloseableHttpClient httpClient = getHttpClient();
+        CloseableHttpClient httpClient = getHttpClient(url);
         CloseableHttpResponse response = null;
         String resultString = "";
         try {
